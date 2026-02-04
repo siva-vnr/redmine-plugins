@@ -1,0 +1,37 @@
+<h2>Tactical Meeting Response: <%= @tactical_meeting_response.user.name %></h2>
+<p>Meeting: <%= @tactical_meeting.start_date %> to <%= @tactical_meeting.end_date %></p>
+
+<div class="box">
+  <fieldset>
+    <legend>Review</legend>
+    <p><strong>What was the goal ?</strong><br><%= simple_format @tactical_meeting_response.individual_goal %></p>
+    <p><strong>What is done ?</strong><br><%= simple_format @tactical_meeting_response.what_was_done %></p>
+    <p><strong>What is not done ?</strong><br><%= simple_format @tactical_meeting_response.what_not_done %></p>
+  </fieldset>
+
+  <fieldset>
+    <legend>Reflect</legend>
+    <p><strong>What was missing from your end ?</strong><br><%= simple_format @tactical_meeting_response.missing_from_my_end %></p>
+    <p><strong>What did you learn ?</strong><br><%= simple_format @tactical_meeting_response.learnings %></p>
+  </fieldset>
+
+  <fieldset>
+    <legend>Result</legend>
+    <p><strong>What will be different from your end ?</strong><br><%= simple_format @tactical_meeting_response.different_from_my_end %></p>
+    <p><strong>What will you get done and by when ?</strong><br><%= simple_format @tactical_meeting_response.get_done_by_when %></p>
+  </fieldset>
+
+  <fieldset>
+    <legend>Creation</legend>
+    <p><strong>Creation : Next, Fortnight, Goals,</strong><br><%= simple_format @tactical_meeting_response.next_fortnight_goals %></p>
+  </fieldset>
+
+  <fieldset>
+    <legend>Facilitate</legend>
+    <p><strong>Facilitate sharing of problems : Problems, Doubts, Fears</strong><br><%= simple_format @tactical_meeting_response.problems_doubts_fears %></p>
+  </fieldset>
+
+  <p><strong>Closure Notes</strong><br><%= simple_format @tactical_meeting_response.closure_notes %></p>
+</div>
+
+<p><%= link_to "Back to Responses", tactical_meeting_responses_path(tactical_meeting_id: @tactical_meeting.id) %></p>

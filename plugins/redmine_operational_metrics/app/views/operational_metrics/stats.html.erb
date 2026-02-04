@@ -1,0 +1,180 @@
+<% content_for :sidebar do %>
+  <h3>Filter</h3>
+  <%= form_tag(stats_operational_metrics_path, :method => :get) do %>
+    <p>
+      <label for='date_from'>From:</label><br>
+      <%= date_field_tag 'date_from', params[:date_from] %>
+    </p>
+    <p>
+      <label for='date_to'>To:</label><br>
+      <%= date_field_tag 'date_to', params[:date_to] %>
+    </p>
+    <p>
+      <label for='project'>Project:</label><br>
+      <%= select_tag 'project', options_for_select(@projects, params[:project]), include_blank: true %>
+    </p>
+    <% if User.current.admin? %>
+      <p>
+        <label for='user_name'>User:</label><br>
+        <%= select_tag 'user_name', options_for_select(@users, params[:user_name]), include_blank: true %>
+      </p>
+    <% end %>
+    <p>
+      <%= submit_tag 'Apply', :name => nil %>
+      <%= link_to 'Clear', stats_operational_metrics_path, :class => 'icon icon-reload' %>
+    </p>
+  <% end %>
+  <h3>Navigation</h3>
+  <%= link_to 'Back to List', operational_metrics_path, :class => 'icon icon-list' %>
+<% end %>
+
+<h2>Operational Metrics Analytics</h2>
+
+<h2>Operational Metrics Analytics</h2>
+
+<%
+  hours = @total_spent_minutes / 60
+  minutes = @total_spent_minutes % 60
+  formatted_time = "#{hours}:#{minutes.to_s.rjust(2, '0')}"
+  
+  color = if @total_spent_minutes > 420 # 7 hours
+            'red'
+          # 4:30 hours = 270 minutes
+          elsif @total_spent_minutes > 270 
+            'green'
+          else
+            'orange'
+          end
+%>
+
+<div style="padding: 10px; border: 1px solid #ddd; margin-bottom: 10px; background-color: #f9f9f9;">
+  <strong>Total Spent Time: </strong>
+  <span style="color: <%= color %>; font-weight: bold; font-size: 1.2em;">
+    <%= formatted_time %>
+  </span>
+</div>
+
+<div class="tabs">
+  <ul>
+    <li><a href="#tab-todays-list" class="selected" onclick="showTab('todays-list', this); return false;">Today's List</a></li>
+    <li><a href="#tab-completion" onclick="showTab('completion', this); return false;">Completion Status</a></li>
+    <li><a href="#tab-project" onclick="showTab('project', this); return false;">Projects</a></li>
+  </ul>
+</div>
+
+<div id="tab-todays-list" class="tab-content">
+  <h3>Today's List</h3>
+  <table class="list">
+    <thead>
+      <tr>
+        <th>Task ID</th>
+        <% if User.current.admin? && params[:user_name].blank? %>
+          <th>User Name</th>
+        <% end %>
+        <% if params[:project].blank? %>
+          <th>Project</th>
+        <% end %>
+        <th>Task Planned</th>
+        <th>Spent Time</th>
+        <th>Spent Detail</th>
+        <th>Collaborate With</th>
+        <th>Completion</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @todays_metrics.each do |metric| %>
+        <tr class="<%= cycle('odd', 'even') %>">
+          <td><%= link_to metric.task_id, issue_path(metric.task_id), target: '_blank' %></td>
+          <% if User.current.admin? && params[:user_name].blank? %>
+            <td><%= metric.user_name %></td>
+          <% end %>
+          <% if params[:project].blank? %>
+            <td><%= metric.project %></td>
+          <% end %>
+          <td><%= metric.task_planed %></td>
+          <td><%= metric.spent_time %></td>
+          <td><%= metric.spent_detail %></td>
+          <td><%= metric.collaborate_with %></td>
+          <td><%= metric.completion %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div id="tab-completion" class="tab-content" style="display:none;">
+  <h3>Completion Status</h3>
+  <div style="width: 600px; margin: 0 auto;">
+    <canvas id="completionChart"></canvas>
+  </div>
+</div>
+
+<div id="tab-project" class="tab-content" style="display:none;">
+  <h3>Projects</h3>
+  <div style="width: 800px; margin: 0 auto;">
+    <canvas id="projectChart"></canvas>
+  </div>
+</div>
+
+<div class="contextual">
+  <%= link_to 'Back to List', operational_metrics_path, :class => 'icon icon-list' %>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  function showTab(tabId, link) {
+    // Hide all tabs
+    var contents = document.getElementsByClassName('tab-content');
+    for (var i = 0; i < contents.length; i++) {
+      contents[i].style.display = 'none';
+    }
+    // Show selected tab
+    document.getElementById('tab-' + tabId).style.display = 'block';
+    
+    // Update selected link
+    var links = link.parentNode.parentNode.getElementsByTagName('a');
+    for (var i = 0; i < links.length; i++) {
+      links[i].classList.remove('selected');
+    }
+    link.classList.add('selected');
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    // Completion Chart
+    var ctxCompletion = document.getElementById('completionChart').getContext('2d');
+    new Chart(ctxCompletion, {
+      type: 'pie',
+      data: {
+        labels: <%= raw @completion_counts.keys.to_json %>,
+        datasets: [{
+          data: <%= raw @completion_counts.values.to_json %>,
+          backgroundColor: ['#36a2eb', '#ff6384', '#ffcd56', '#4bc0c0']
+        }]
+      }
+    });
+
+    // Project Chart
+    var ctxProject = document.getElementById('projectChart').getContext('2d');
+    new Chart(ctxProject, {
+      type: 'bar',
+      data: {
+        labels: <%= raw @project_counts.keys.to_json %>,
+        datasets: [{
+          label: 'Count',
+          data: <%= raw @project_counts.values.to_json %>,
+          backgroundColor: '#36a2eb'
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
+            }
+          }
+        }
+      }
+    });
+  });
+</script>

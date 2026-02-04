@@ -1,0 +1,24 @@
+<h2>Responses for Meeting: <%= @tactical_meeting.start_date %> to <%= @tactical_meeting.end_date %></h2>
+
+<table class="list">
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Submitted At</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @responses.each do |response| %>
+      <tr>
+        <td><%= response.user.name %></td>
+        <td><%= response.created_at.strftime("%Y-%m-%d %H:%M") %></td>
+        <td>
+          <%= link_to "View", tactical_meeting_response_path(response), class: 'icon icon-view' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<p><%= link_to "Back to Meetings", tactical_meetings_path %></p>

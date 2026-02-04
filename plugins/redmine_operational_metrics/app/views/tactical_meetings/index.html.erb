@@ -1,0 +1,31 @@
+<h2>Tactical Meetings</h2>
+
+<% if User.current.admin? %>
+  <div class="contextual">
+    <%= link_to "New Tactical Meeting", new_tactical_meeting_path, class: 'icon icon-add' %>
+  </div>
+<% end %>
+
+<table class="list">
+  <thead>
+    <tr>
+      <th>Start Date</th>
+      <th>End Date</th>
+      <th>Facilitator</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @tactical_meetings.each do |meeting| %>
+      <tr>
+        <td><%= meeting.start_date %></td>
+        <td><%= meeting.end_date %></td>
+        <td><%= meeting.facilitator %></td>
+        <td>
+          <%= link_to "Respond", new_tactical_meeting_response_path(tactical_meeting_id: meeting.id), class: 'icon icon-edit' %>
+          <%= link_to "View Responses", tactical_meeting_responses_path(tactical_meeting_id: meeting.id), class: 'icon icon-view' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

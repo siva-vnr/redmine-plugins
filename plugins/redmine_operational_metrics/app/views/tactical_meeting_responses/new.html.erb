@@ -1,0 +1,136 @@
+<style>
+  .split-container {
+    display: flex;
+    width: 100%;
+    gap: 20px;
+  }
+  .left-panel {
+    width: 40%;
+    overflow-y: auto;
+    max-height: 80vh;
+    border-right: 1px solid #ddd;
+    padding-right: 10px;
+  }
+  .right-panel {
+    width: 60%;
+    padding-left: 10px;
+  }
+  .metric-item {
+    border: 1px solid #eee;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+  }
+  .metric-date {
+    font-weight: bold;
+    color: #555;
+  }
+</style>
+
+<h2>Tactical Meeting Response</h2>
+<p>Meeting: <%= @tactical_meeting.start_date %> to <%= @tactical_meeting.end_date %></p>
+
+<div class="split-container">
+  <!-- Left Panel: Operational Metrics Tasks -->
+  <div class="left-panel">
+    <h3>Your Tasks</h3>
+    <% if @operational_metrics.any? %>
+      <% @operational_metrics.each do |metric| %>
+        <div class="metric-item">
+          <div class="metric-date">
+            <%= link_to metric.task_date, operational_metric_path(metric), target: "_blank" %>
+            (Task #<%= link_to metric.task_id, issue_path(metric.task_id), target: "_blank" %>)
+          </div>
+          <div><strong>Task:</strong> <%= metric.task_planed %></div>
+          <div><strong>Detail:</strong> <%= metric.spent_detail %></div>
+        </div>
+      <% end %>
+    <% else %>
+      <p>No tasks found for this period.</p>
+    <% end %>
+  </div>
+
+  <!-- Right Panel: Response Form -->
+  <div class="right-panel">
+    <h3>Your Response</h3>
+    <%= form_for @tactical_meeting_response do |f| %>
+      <%= f.hidden_field :tactical_meeting_id %>
+      
+      <% if @tactical_meeting_response.errors.any? %>
+        <div id="error_explanation">
+          <ul>
+          <% @tactical_meeting_response.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="box">
+        <fieldset>
+          <legend>Review</legend>
+          <p>
+            <%= f.label :individual_goal, "What was the goal ?" %><br>
+            <%= f.text_area :individual_goal, rows: 3, style: "width: 100%;" %>
+          </p>
+          <p>
+            <%= f.label :what_was_done, "What is done ?" %><br>
+            <%= f.text_area :what_was_done, rows: 3, style: "width: 100%;" %>
+          </p>
+          <p>
+            <%= f.label :what_not_done, "What is not done ?" %><br>
+            <%= f.text_area :what_not_done, rows: 3, style: "width: 100%;" %>
+          </p>
+        </fieldset>
+
+        <fieldset>
+          <legend>Reflect</legend>
+          <p>
+            <%= f.label :missing_from_my_end, "What was missing from your end ?" %><br>
+            <%= f.text_area :missing_from_my_end, rows: 3, style: "width: 100%;" %>
+          </p>
+          <p>
+            <%= f.label :learnings, "What did you learn ?" %><br>
+            <%= f.text_area :learnings, rows: 3, style: "width: 100%;" %>
+          </p>
+        </fieldset>
+
+        <fieldset>
+          <legend>Result</legend>
+          <p>
+            <%= f.label :different_from_my_end, "What will be different from your end ?" %><br>
+            <%= f.text_area :different_from_my_end, rows: 3, style: "width: 100%;" %>
+          </p>
+          <p>
+            <%= f.label :get_done_by_when, "What will you get done and by when ?" %><br>
+            <%= f.text_area :get_done_by_when, rows: 3, style: "width: 100%;" %>
+          </p>
+        </fieldset>
+
+        <fieldset>
+          <legend>Creation</legend>
+          <p>
+            <%= f.label :next_fortnight_goals, "Creation : Next, Fortnight, Goals," %><br>
+            <%= f.text_area :next_fortnight_goals, rows: 3, style: "width: 100%;" %>
+          </p>
+        </fieldset>
+
+        <fieldset>
+          <legend>Facilitate</legend>
+          <p>
+            <%= f.label :problems_doubts_fears, "Facilitate sharing of problems : Problems, Doubts, Fears" %><br>
+            <%= f.text_area :problems_doubts_fears, rows: 3, style: "width: 100%;" %>
+          </p>
+        </fieldset>
+
+        <p>
+          <%= f.label :closure_notes, "Closure Notes" %><br>
+          <%= f.text_area :closure_notes, rows: 3, style: "width: 100%;" %>
+        </p>
+      </div>
+
+      <%= f.submit "Submit Response" %>
+    <% end %>
+  </div>
+</div>

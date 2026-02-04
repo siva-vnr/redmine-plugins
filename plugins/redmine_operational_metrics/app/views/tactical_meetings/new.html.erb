@@ -1,0 +1,31 @@
+<h2>New Tactical Meeting</h2>
+
+<%= form_for @tactical_meeting do |f| %>
+  <% if @tactical_meeting.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@tactical_meeting.errors.count, "error") %> prohibited this tactical meeting from being saved:</h2>
+      <ul>
+      <% @tactical_meeting.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="box tabular">
+    <p>
+      <%= f.label :start_date, "Start Date" %>
+      <%= f.date_field :start_date, required: true %>
+    </p>
+    <p>
+      <%= f.label :end_date, "End Date" %>
+      <%= f.date_field :end_date, required: true %>
+    </p>
+    <p>
+      <%= f.label :facilitator, "Facilitator" %>
+      <%= f.text_field :facilitator %>
+    </p>
+  </div>
+
+  <%= f.submit "Create Tactical Meeting" %>
+<% end %>

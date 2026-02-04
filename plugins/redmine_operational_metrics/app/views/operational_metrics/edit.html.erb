@@ -1,0 +1,6 @@
+<h2>Edit Operational Metric</h2>
+
+<%= form_for @operational_metric do |f| %>
+  <%= render :partial => 'form', :locals => { :f => f } %>
+  <%= submit_tag 'Update' %>
+<% end %>

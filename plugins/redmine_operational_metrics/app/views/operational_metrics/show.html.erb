@@ -1,0 +1,38 @@
+<h2>Operational Metric #<%= @operational_metric.id %></h2>
+
+<div class="issue details">
+  <div class="attributes">
+    <div class="splitcontent">
+      <div class="splitcontentleft">
+        <p><strong>Task ID:</strong> <%= @operational_metric.task_id %></p>
+        <p><strong>User Name:</strong> <%= @operational_metric.user_name %></p>
+        <p><strong>Project:</strong> <%= @operational_metric.project %></p>
+        <p><strong>Date:</strong> <%= @operational_metric.task_date %></p>
+      </div>
+      <div class="splitcontentright">
+        <p><strong>Spent Time:</strong> <%= @operational_metric.spent_time %></p>
+        <p><strong>Collaborate With:</strong> <%= @operational_metric.collaborate_with %></p>
+        <p><strong>Completion:</strong> <%= @operational_metric.completion %></p>
+      </div>
+    </div>
+  </div>
+
+  <hr />
+
+  <p><strong>Task Planed:</strong></p>
+  <div class="wiki">
+    <%= simple_format @operational_metric.task_planed %>
+  </div>
+
+  <hr />
+
+  <p><strong>Spent Detail:</strong></p>
+  <div class="wiki">
+    <%= simple_format @operational_metric.spent_detail %>
+  </div>
+</div>
+
+<div class="contextual">
+  <%= link_to 'Edit', edit_operational_metric_path(@operational_metric), :class => 'icon icon-edit' %>
+  <%= link_to 'Back', operational_metrics_path %>
+</div>

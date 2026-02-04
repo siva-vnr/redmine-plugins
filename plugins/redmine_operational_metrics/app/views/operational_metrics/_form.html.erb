@@ -1,0 +1,13 @@
+<%= error_messages_for 'operational_metric' %>
+
+<div class="box tabular">
+  <p><%= f.text_field :task_id, :required => true %></p>
+  <p><%= f.text_field :user_name, :required => true %></p>
+  <p><%= f.text_field :project %></p>
+  <p><%= f.text_area :task_planed, :rows => 5 %></p>
+  <p><%= f.date_field :task_date %></p>
+  <p><%= f.text_field :spent_time %></p>
+  <p><%= f.text_area :spent_detail, :rows => 5 %></p>
+  <p><%= f.text_field :collaborate_with %></p>
+  <p><%= f.select :completion, ['Break down', 'Break through'], :required => true %></p>
+</div>
