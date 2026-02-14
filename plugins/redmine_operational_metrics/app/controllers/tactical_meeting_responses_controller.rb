@@ -2,11 +2,20 @@ class TacticalMeetingResponsesController < ApplicationController
   def index
     @tactical_meeting = TacticalMeeting.find(params[:tactical_meeting_id])
     @responses = @tactical_meeting.tactical_meeting_responses.includes(:user)
+    
+    unless User.current.admin?
+      @responses = @responses.where(user_id: User.current.id)
+    end
   end
 
   def show
     @tactical_meeting_response = TacticalMeetingResponse.find(params[:id])
     @tactical_meeting = @tactical_meeting_response.tactical_meeting
+
+    if !User.current.admin? && @tactical_meeting_response.user_id != User.current.id
+      render_403
+      return
+    end
   end
 
   def new
