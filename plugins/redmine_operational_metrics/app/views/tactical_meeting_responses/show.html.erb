@@ -2,6 +2,11 @@
 <p>Meeting: <%= @tactical_meeting.start_date %> to <%= @tactical_meeting.end_date %></p>
 
 <div class="box">
+  <div style="margin-bottom: 20px; font-size: 1.1em;">
+    <strong>Break down count:</strong> <%= @tactical_meeting_response.break_down_count %> <br>
+    <strong>Break through count:</strong> <%= @tactical_meeting_response.break_through_count %>
+  </div>
+
   <fieldset>
     <legend>Review</legend>
     <p><strong>What was the goal ?</strong><br><%= simple_format @tactical_meeting_response.individual_goal %></p>

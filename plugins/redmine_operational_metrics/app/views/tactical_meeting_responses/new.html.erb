@@ -56,6 +56,8 @@
     <h3>Your Response</h3>
     <%= form_for @tactical_meeting_response do |f| %>
       <%= f.hidden_field :tactical_meeting_id %>
+      <%= f.hidden_field :break_down_count %>
+      <%= f.hidden_field :break_through_count %>
       
       <% if @tactical_meeting_response.errors.any? %>
         <div id="error_explanation">
@@ -68,6 +70,11 @@
       <% end %>
 
       <div class="box">
+        <div style="margin-bottom: 20px; font-size: 1.1em;">
+          <strong>Break down count:</strong> <%= @tactical_meeting_response.break_down_count %> <br>
+          <strong>Break through count:</strong> <%= @tactical_meeting_response.break_through_count %>
+        </div>
+
         <fieldset>
           <legend>Review</legend>
           <p>
