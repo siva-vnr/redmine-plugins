@@ -4,5 +4,9 @@ resources :operational_metrics do
   end
 end
 
+namespace :api do
+  resources :operational_metrics
+end
+
 resources :tactical_meetings, only: [:index, :new, :create]
 resources :tactical_meeting_responses, only: [:index, :show, :new, :create]
