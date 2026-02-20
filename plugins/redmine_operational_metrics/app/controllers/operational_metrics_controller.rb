@@ -42,7 +42,11 @@ class OperationalMetricsController < ApplicationController
       @todays_metrics = @todays_metrics.where(user_name: User.current.login)
     end
     
-    @total_spent_minutes = @metrics.sum(:spent_time) || 0
+    @total_spent_minutes = if !User.current.admin? || params[:user_name].present?
+                             @metrics.sum(:spent_time) || 0
+                           else
+                             nil
+                           end
   end
 
   def index
@@ -61,7 +65,11 @@ class OperationalMetricsController < ApplicationController
     end
 
     @operational_metrics = scope
-    @total_spent_minutes = scope.sum(:spent_time) || 0
+    @total_spent_minutes = if !User.current.admin? || params[:user_name].present?
+                             scope.sum(:spent_time) || 0
+                           else
+                             nil
+                           end
   end
 
   def show

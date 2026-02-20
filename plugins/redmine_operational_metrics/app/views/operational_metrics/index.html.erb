@@ -28,27 +28,29 @@
 
 <br/>
 
-<%
-  hours = @total_spent_minutes / 60
-  minutes = @total_spent_minutes % 60
-  formatted_time = "#{hours}:#{minutes.to_s.rjust(2, '0')}"
-  
-  color = if @total_spent_minutes > 420 # 7 hours
-            'red'
-          # 4:30 hours = 270 minutes
-          elsif @total_spent_minutes > 270 
-            'green'
-          else
-            'orange'
-          end
-%>
+<% if @total_spent_minutes.present? %>
+  <%
+    hours = @total_spent_minutes / 60
+    minutes = @total_spent_minutes % 60
+    formatted_time = "#{hours}:#{minutes.to_s.rjust(2, '0')}"
+    
+    color = if @total_spent_minutes > 420 # 7 hours
+              'red'
+            # 4:30 hours = 270 minutes
+            elsif @total_spent_minutes > 270 
+              'green'
+            else
+              'orange'
+            end
+  %>
 
-<div style="padding: 10px; border: 1px solid #ddd; margin-bottom: 10px; background-color: #f9f9f9;">
-  <strong>Total Spent Time: </strong>
-  <span style="color: <%= color %>; font-weight: bold; font-size: 1.2em;">
-    <%= formatted_time %>
-  </span>
-</div>
+  <div style="padding: 10px; border: 1px solid #ddd; margin-bottom: 10px; background-color: #f9f9f9;">
+    <strong>Total Spent Time: </strong>
+    <span style="color: <%= color %>; font-weight: bold; font-size: 1.2em;">
+      <%= formatted_time %>
+    </span>
+  </div>
+<% end %>
 
 <table class="list">
   <thead>
