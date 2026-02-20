@@ -41,6 +41,14 @@ class OperationalMetricsController < ApplicationController
     if !User.current.admin?
       @todays_metrics = @todays_metrics.where(user_name: User.current.login)
     end
+
+    if params[:project].present?
+      @todays_metrics = @todays_metrics.where(project: params[:project])
+    end
+
+    if User.current.admin? && params[:user_name].present?
+      @todays_metrics = @todays_metrics.where(user_name: params[:user_name])
+    end
     
     @total_spent_minutes = if !User.current.admin? || params[:user_name].present?
                              @metrics.sum(:spent_time) || 0
