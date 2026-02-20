@@ -28,12 +28,13 @@
                   is_current_month = day.month == month.month
                   bg_color = is_holiday ? '#ffcccc' : (is_current_month ? '#fff' : '#f9f9f9')
                   text_color = is_current_month ? '#333' : '#ccc'
-                  cursor = is_current_month ? 'pointer' : 'default'
+                  is_admin = User.current.admin?
+                  cursor = (is_current_month && is_admin) ? 'pointer' : 'default'
                 %>
                 <td class="holiday-cell <%= 'is-holiday' if is_holiday %>" 
                     data-date="<%= day %>"
                     style="padding: 10px; text-align: center; border: 1px solid #eee; background-color: <%= bg_color %>; color: <%= text_color %>; cursor: <%= cursor %>;"
-                    onclick="<%= "toggleHoliday(this)" if is_current_month %>">
+                    onclick="<%= "toggleHoliday(this)" if is_current_month && is_admin %>">
                   <%= day.day %>
                 </td>
               <% end %>
