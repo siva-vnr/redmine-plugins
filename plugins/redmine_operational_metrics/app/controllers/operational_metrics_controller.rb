@@ -3,9 +3,11 @@ class OperationalMetricsController < ApplicationController
   before_action :require_admin, only: [:edit, :update, :destroy]
 
   def stats
+    @last_working_day = find_last_working_day(Date.today)
+    
     if params[:date_from].blank? && params[:date_to].blank?
-      params[:date_from] = Date.today
-      params[:date_to] = Date.today
+      params[:date_from] = @last_working_day
+      params[:date_to] = @last_working_day
     end
 
     @metrics = OperationalMetric.all
@@ -35,7 +37,11 @@ class OperationalMetricsController < ApplicationController
     @completion_counts = @metrics.group(:completion).count
     @project_counts = @metrics.group(:project).count
     
-    @todays_metrics = @metrics.where(task_date: Date.today)
+    @todays_metrics = OperationalMetric.where(task_date: @last_working_day)
+    if !User.current.admin?
+      @todays_metrics = @todays_metrics.where(user_name: User.current.login)
+    end
+    
     @total_spent_minutes = @metrics.sum(:spent_time) || 0
   end
 
@@ -94,6 +100,14 @@ class OperationalMetricsController < ApplicationController
   end
 
   private
+
+  def find_last_working_day(date)
+    d = date - 1
+    while Holiday.exists?(holiday_date: d)
+      d -= 1
+    end
+    d
+  end
 
   def find_operational_metric
     @operational_metric = OperationalMetric.find(params[:id])

@@ -56,14 +56,14 @@
 
 <div class="tabs">
   <ul>
-    <li><a href="#tab-todays-list" class="selected" onclick="showTab('todays-list', this); return false;">Today's List</a></li>
+    <li><a href="#tab-todays-list" class="selected" onclick="showTab('todays-list', this); return false;">Last Working Day's List</a></li>
     <li><a href="#tab-completion" onclick="showTab('completion', this); return false;">Completion Status</a></li>
     <li><a href="#tab-project" onclick="showTab('project', this); return false;">Projects</a></li>
   </ul>
 </div>
 
 <div id="tab-todays-list" class="tab-content">
-  <h3>Today's List</h3>
+  <h3>Last Working Day's List (<%= @last_working_day %>)</h3>
   <table class="list">
     <thead>
       <tr>
