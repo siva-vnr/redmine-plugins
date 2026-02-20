@@ -1,0 +1,96 @@
+<h2>Manage Holidays</h2>
+
+<div class="calendar-container" style="display: flex; gap: 20px; flex-wrap: wrap;">
+  <% [@current_month, @next_month].each do |month| %>
+    <div class="month-calendar" style="border: 1px solid #ddd; padding: 10px; border-radius: 8px; background: #fff; min-width: 300px;">
+      <h3 style="text-align: center;"><%= month.strftime("%B %Y") %></h3>
+      <table class="list" style="width: 100%; border-collapse: collapse;">
+        <thead>
+          <tr>
+            <% %w(Sun Mon Tue Wed Thu Fri Sat).each do |day| %>
+              <th style="padding: 5px; text-align: center; border-bottom: 2px solid #eee;"><%= day %></th>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody>
+          <% 
+            first_day = month.beginning_of_month
+            last_day = month.end_of_month
+            start_date = first_day.beginning_of_week(:sunday)
+            end_date = last_day.end_of_week(:sunday)
+            
+            (start_date..end_date).each_slice(7) do |week|
+          %>
+            <tr>
+              <% week.each do |day| %>
+                <% 
+                  is_holiday = @holidays.include?(day)
+                  is_current_month = day.month == month.month
+                  bg_color = is_holiday ? '#ffcccc' : (is_current_month ? '#fff' : '#f9f9f9')
+                  text_color = is_current_month ? '#333' : '#ccc'
+                  cursor = is_current_month ? 'pointer' : 'default'
+                %>
+                <td class="holiday-cell <%= 'is-holiday' if is_holiday %>" 
+                    data-date="<%= day %>"
+                    style="padding: 10px; text-align: center; border: 1px solid #eee; background-color: <%= bg_color %>; color: <%= text_color %>; cursor: <%= cursor %>;"
+                    onclick="<%= "toggleHoliday(this)" if is_current_month %>">
+                  <%= day.day %>
+                </td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</div>
+
+<p>
+  <%= link_to 'Back to Operational Metrics', operational_metrics_path, :class => 'icon icon-back' %>
+</p>
+
+<script>
+function toggleHoliday(cell) {
+  const date = cell.getAttribute('data-date');
+  const isHoliday = cell.classList.contains('is-holiday');
+  const method = isHoliday ? 'DELETE' : 'POST';
+  const url = isHoliday ? `/holidays/${date}` : '/holidays';
+  
+  const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+  fetch(url, {
+    method: method,
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-Token': token
+    },
+    body: method === 'POST' ? JSON.stringify({ holiday: { holiday_date: date } }) : null
+  })
+  .then(response => {
+    if (response.ok) {
+      if (isHoliday) {
+        cell.classList.remove('is-holiday');
+        cell.style.backgroundColor = '#fff';
+      } else {
+        cell.classList.add('is-holiday');
+        cell.style.backgroundColor = '#ffcccc';
+      }
+    } else {
+      alert('Failed to update holiday status');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('An error occurred');
+  });
+}
+</script>
+
+<style>
+.holiday-cell:hover {
+  filter: brightness(0.95);
+}
+.holiday-cell.is-holiday:hover {
+  filter: brightness(0.9);
+}
+</style>

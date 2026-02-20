@@ -4,6 +4,8 @@ resources :operational_metrics do
   end
 end
 
+resources :holidays, only: [:index, :create, :destroy]
+
 namespace :api do
   resources :operational_metrics
 end
