@@ -34,7 +34,7 @@
   <%
     hours = @total_spent_minutes / 60
     minutes = @total_spent_minutes % 60
-    formatted_time = "#{hours}:#{minutes.to_s.rjust(2, '0')}"
+    formatted_time = "#{hours}.#{minutes.to_s.rjust(2, '0')}"
     
     color = if @total_spent_minutes > 420 # 7 hours
               'red'
@@ -92,7 +92,7 @@
             <td><%= metric.project %></td>
           <% end %>
           <td><%= metric.task_planed %></td>
-          <td><%= metric.spent_time %></td>
+          <td><%= metric.formatted_spent_time %></td>
           <td><%= metric.spent_detail %></td>
           <td><%= metric.collaborate_with %></td>
           <td><%= metric.completion %></td>

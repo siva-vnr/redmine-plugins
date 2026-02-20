@@ -32,7 +32,7 @@
   <%
     hours = @total_spent_minutes / 60
     minutes = @total_spent_minutes % 60
-    formatted_time = "#{hours}:#{minutes.to_s.rjust(2, '0')}"
+    formatted_time = "#{hours}.#{minutes.to_s.rjust(2, '0')}"
     
     color = if @total_spent_minutes > 420 # 7 hours
               'red'
@@ -72,6 +72,7 @@
         <td><%= metric.user_name %></td>
         <td><%= metric.project %></td>
         <td><%= metric.task_date %></td>
+        <td><%= metric.formatted_spent_time %></td>
         <td><%= metric.completion %></td>
         <td class="buttons">
           <%= link_to 'Edit', edit_operational_metric_path(metric), :class => 'icon icon-edit' %>
