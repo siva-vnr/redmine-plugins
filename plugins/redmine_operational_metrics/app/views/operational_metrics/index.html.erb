@@ -1,9 +1,5 @@
 <h2>Operational Metrics Summary for <%= @last_working_day %></h2>
 
-<div class="contextual">
-  <%= link_to 'New Operational Metric', new_operational_metric_path, :class => 'icon icon-add' %>
-</div>
-
 <% content_for :sidebar do %>
   <h3>Navigation</h3>
   <%= link_to 'View Graphs', stats_operational_metrics_path, :class => 'icon icon-stats' %><br/>
