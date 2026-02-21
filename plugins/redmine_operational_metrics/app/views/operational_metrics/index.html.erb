@@ -1,81 +1,33 @@
-<h2>Operational Metrics</h2>
+<h2>Operational Metrics Summary for <%= @last_working_day %></h2>
 
 <div class="contextual">
   <%= link_to 'New Operational Metric', new_operational_metric_path, :class => 'icon icon-add' %>
 </div>
 
 <% content_for :sidebar do %>
-  <h3>Filter</h3>
-  <%= form_tag(operational_metrics_path, :method => :get) do %>
-    <p>
-      <label for='date_from'>From:</label><br>
-      <%= date_field_tag 'date_from', params[:date_from] %>
-    </p>
-    <p>
-      <label for='date_to'>To:</label><br>
-      <%= date_field_tag 'date_to', params[:date_to] %>
-    </p>
-    <p>
-      <%= submit_tag 'Apply', :name => nil %>
-      <%= link_to 'Clear', operational_metrics_path, :class => 'icon icon-reload' %>
-    </p>
-  <% end %>
-  <h3>Analytics</h3>
+  <h3>Navigation</h3>
   <%= link_to 'View Graphs', stats_operational_metrics_path, :class => 'icon icon-stats' %><br/>
   <%= link_to 'Manage Holidays', holidays_path, :class => 'icon icon-calendar' %>
 <% end %>
 <br/>
 
-<br/>
-
-<% if @total_spent_minutes.present? %>
-  <%
-    formatted_time = @total_spent_minutes.to_f.round(2)
-    
-    color = if @total_spent_minutes > 7.0
-              'red'
-            elsif @total_spent_minutes > 4.5
-              'green'
-            else
-              'orange'
-            end
-  %>
-
-  <div style="padding: 10px; border: 1px solid #ddd; margin-bottom: 10px; background-color: #f9f9f9;">
-    <strong>Total Spent Time: </strong>
-    <span style="color: <%= color %>; font-weight: bold; font-size: 1.2em;">
-      <%= formatted_time %>
-    </span>
-  </div>
-<% end %>
 
 <table class="list">
   <thead>
     <tr>
-      <th>ID</th>
-      <th>Task ID</th>
       <th>User Name</th>
-      <th>Project</th>
-      <th>Date</th>
-      <th>Spent Time</th>
-      <th>Completion</th>
-      <th></th>
+      <th style="text-align:center;">Ticket Count</th>
+      <th style="text-align:center;">Breakdown Count</th>
+      <th style="text-align:center;">Breakthrough Count</th>
     </tr>
   </thead>
   <tbody>
-    <% @operational_metrics.each do |metric| %>
+    <% @summary_data.each do |data| %>
       <tr class="<%= cycle('odd', 'even') %>">
-        <td><%= link_to metric.id, operational_metric_path(metric) %></td>
-        <td><%= metric.task_id %></td>
-        <td><%= metric.user_name %></td>
-        <td><%= metric.project %></td>
-        <td><%= metric.task_date %></td>
-        <td><%= metric.spent_time %></td>
-        <td><%= metric.completion %></td>
-        <td class="buttons">
-          <%= link_to 'Edit', edit_operational_metric_path(metric), :class => 'icon icon-edit' %>
-          <%= link_to 'Delete', operational_metric_path(metric), :method => :delete, :data => {:confirm => 'Are you sure?'}, :class => 'icon icon-del' %>
-        </td>
+        <td><%= data.user_name %></td>
+        <td style="text-align:center;"><%= data.ticket_count %></td>
+        <td style="text-align:center;"><%= data.breakdown_count %></td>
+        <td style="text-align:center;"><%= data.breakthrough_count %></td>
       </tr>
     <% end %>
   </tbody>

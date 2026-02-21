@@ -58,26 +58,20 @@ class OperationalMetricsController < ApplicationController
   end
 
   def index
-    scope = OperationalMetric.all
+    @last_working_day = find_last_working_day(Date.today)
+    
+    scope = OperationalMetric.where(task_date: @last_working_day)
 
     if !User.current.admin?
       scope = scope.where(user_name: User.current.login)
     end
 
-    if params[:date_from].present?
-      scope = scope.where('task_date >= ?', params[:date_from])
-    end
-
-    if params[:date_to].present?
-      scope = scope.where('task_date <= ?', params[:date_to])
-    end
-
-    @operational_metrics = scope
-    @total_spent_minutes = if !User.current.admin? || params[:user_name].present?
-                             scope.sum(:spent_time) || 0
-                           else
-                             nil
-                           end
+    @summary_data = scope.group(:user_name).select(
+      'user_name',
+      'COUNT(DISTINCT task_id) as ticket_count',
+      "SUM(CASE WHEN completion = 'Break down' THEN 1 ELSE 0 END) as breakdown_count",
+      "SUM(CASE WHEN completion = 'Break through' THEN 1 ELSE 0 END) as breakthrough_count"
+    )
   end
 
   def show
