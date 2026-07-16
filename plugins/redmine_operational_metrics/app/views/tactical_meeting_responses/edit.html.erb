@@ -1,0 +1,86 @@
+<h2>Edit Tactical Meeting Response: <%= @tactical_meeting_response.user.name %></h2>
+<p>Meeting: <%= @tactical_meeting.start_date %> to <%= @tactical_meeting.end_date %></p>
+
+<%= form_for @tactical_meeting_response do |f| %>
+  <% if @tactical_meeting_response.errors.any? %>
+    <div id="error_explanation">
+      <ul>
+      <% @tactical_meeting_response.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="box">
+    <div style="margin-bottom: 20px; font-size: 1.1em;">
+      <strong>Break down count:</strong> <%= @tactical_meeting_response.break_down_count %> <br>
+      <strong>Break through count:</strong> <%= @tactical_meeting_response.break_through_count %>
+    </div>
+
+    <fieldset>
+      <legend>Review</legend>
+      <p>
+        <%= f.label :individual_goal, "What was the goal ?" %><br>
+        <%= f.text_area :individual_goal, rows: 3, style: "width: 100%;" %>
+      </p>
+      <p>
+        <%= f.label :what_was_done, "What is done ?" %><br>
+        <%= f.text_area :what_was_done, rows: 3, style: "width: 100%;" %>
+      </p>
+      <p>
+        <%= f.label :what_not_done, "What is not done ?" %><br>
+        <%= f.text_area :what_not_done, rows: 3, style: "width: 100%;" %>
+      </p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Reflect</legend>
+      <p>
+        <%= f.label :missing_from_my_end, "What was missing from your end ?" %><br>
+        <%= f.text_area :missing_from_my_end, rows: 3, style: "width: 100%;" %>
+      </p>
+      <p>
+        <%= f.label :learnings, "What did you learn ?" %><br>
+        <%= f.text_area :learnings, rows: 3, style: "width: 100%;" %>
+      </p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Result</legend>
+      <p>
+        <%= f.label :different_from_my_end, "What will be different from your end ?" %><br>
+        <%= f.text_area :different_from_my_end, rows: 3, style: "width: 100%;" %>
+      </p>
+      <p>
+        <%= f.label :get_done_by_when, "What will you get done and by when ?" %><br>
+        <%= f.text_area :get_done_by_when, rows: 3, style: "width: 100%;" %>
+      </p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Creation</legend>
+      <p>
+        <%= f.label :next_fortnight_goals, "Creation : Next, Fortnight, Goals," %><br>
+        <%= f.text_area :next_fortnight_goals, rows: 3, style: "width: 100%;" %>
+      </p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Facilitate</legend>
+      <p>
+        <%= f.label :problems_doubts_fears, "Facilitate sharing of problems : Problems, Doubts, Fears" %><br>
+        <%= f.text_area :problems_doubts_fears, rows: 3, style: "width: 100%;" %>
+      </p>
+    </fieldset>
+
+    <p>
+      <%= f.label :closure_notes, "Closure Notes" %><br>
+      <%= f.text_area :closure_notes, rows: 3, style: "width: 100%;" %>
+    </p>
+  </div>
+
+  <%= f.submit "Save Response" %>
+<% end %>
+
+<p><%= link_to "Back to Response", tactical_meeting_response_path(@tactical_meeting_response) %></p>

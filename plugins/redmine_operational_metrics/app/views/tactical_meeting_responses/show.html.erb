@@ -1,6 +1,10 @@
 <h2>Tactical Meeting Response: <%= @tactical_meeting_response.user.name %></h2>
 <p>Meeting: <%= @tactical_meeting.start_date %> to <%= @tactical_meeting.end_date %></p>
 
+<% if User.current.admin? %>
+  <p><%= link_to "Edit", edit_tactical_meeting_response_path(@tactical_meeting_response), class: 'icon icon-edit' %></p>
+<% end %>
+
 <div class="box">
   <div style="margin-bottom: 20px; font-size: 1.1em;">
     <strong>Break down count:</strong> <%= @tactical_meeting_response.break_down_count %> <br>

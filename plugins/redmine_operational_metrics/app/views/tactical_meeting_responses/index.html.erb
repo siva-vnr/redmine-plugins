@@ -15,6 +15,9 @@
         <td><%= response.created_at.strftime("%Y-%m-%d %H:%M") %></td>
         <td>
           <%= link_to "View", tactical_meeting_response_path(response), class: 'icon icon-view' %>
+          <% if User.current.admin? %>
+            <%= link_to "Edit", edit_tactical_meeting_response_path(response), class: 'icon icon-edit' %>
+          <% end %>
         </td>
       </tr>
     <% end %>

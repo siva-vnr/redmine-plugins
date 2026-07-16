@@ -11,4 +11,4 @@ namespace :api do
 end
 
 resources :tactical_meetings, only: [:index, :new, :create]
-resources :tactical_meeting_responses, only: [:index, :show, :new, :create]
+resources :tactical_meeting_responses, only: [:index, :show, :new, :create, :edit, :update]

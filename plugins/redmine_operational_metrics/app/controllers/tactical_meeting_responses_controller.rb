@@ -63,6 +63,27 @@ class TacticalMeetingResponsesController < ApplicationController
     end
   end
 
+  def edit
+    return render_403 unless User.current.admin?
+
+    @tactical_meeting_response = TacticalMeetingResponse.find(params[:id])
+    @tactical_meeting = @tactical_meeting_response.tactical_meeting
+  end
+
+  def update
+    return render_403 unless User.current.admin?
+
+    @tactical_meeting_response = TacticalMeetingResponse.find(params[:id])
+    @tactical_meeting = @tactical_meeting_response.tactical_meeting
+
+    if @tactical_meeting_response.update(tactical_meeting_response_edit_params)
+      flash[:notice] = "Response updated successfully."
+      redirect_to tactical_meeting_response_path(@tactical_meeting_response)
+    else
+      render :edit
+    end
+  end
+
   private
 
   def tactical_meeting_response_params
@@ -80,6 +101,21 @@ class TacticalMeetingResponsesController < ApplicationController
       :closure_notes,
       :break_down_count,
       :break_through_count
+    )
+  end
+
+  def tactical_meeting_response_edit_params
+    params.require(:tactical_meeting_response).permit(
+      :individual_goal,
+      :what_was_done,
+      :what_not_done,
+      :missing_from_my_end,
+      :learnings,
+      :different_from_my_end,
+      :get_done_by_when,
+      :next_fortnight_goals,
+      :problems_doubts_fears,
+      :closure_notes
     )
   end
 end
