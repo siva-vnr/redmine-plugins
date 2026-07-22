@@ -1,0 +1,26 @@
+<h2>KRA Settings</h2>
+
+<% Kra::ROLES.each do |role| %>
+  <div class="box">
+    <h3><%= role %></h3>
+    <% kras = @kras_by_role[role] || [] %>
+    <% if kras.any? %>
+      <table class="list">
+        <thead>
+          <tr><th>KRA</th><th>Weight</th></tr>
+        </thead>
+        <tbody>
+          <% kras.each do |kra| %>
+            <tr>
+              <td><%= kra.name %></td>
+              <td><%= kra.weight %>%</td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <p>No KRAs configured yet.</p>
+    <% end %>
+    <p><%= link_to "Edit #{role} KRAs", edit_kra_path(role: role) %></p>
+  </div>
+<% end %>

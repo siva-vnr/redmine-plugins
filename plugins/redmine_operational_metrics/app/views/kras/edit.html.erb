@@ -1,0 +1,24 @@
+<h2>KRA Settings: <%= @role %></h2>
+
+<p>Weights must add up to 100%. Leave a row's name blank to remove it.</p>
+
+<%= form_tag kra_path(role: @role), method: :patch do %>
+  <table class="list">
+    <thead>
+      <tr><th>KRA Name</th><th>Weight (%)</th></tr>
+    </thead>
+    <tbody>
+      <% rows = @kras.to_a %>
+      <% (rows + Array.new([5 - rows.size, 1].max)).each_with_index do |kra, i| %>
+        <tr>
+          <td><%= text_field_tag "kras[#{i}][name]", kra&.name, style: "width: 100%;" %></td>
+          <td><%= number_field_tag "kras[#{i}][weight]", kra&.weight, step: 0.01, min: 0, max: 100, style: "width: 100px;" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= submit_tag "Save KRA Weights" %>
+<% end %>
+
+<p><%= link_to "Back to KRA Settings", kras_path %></p>

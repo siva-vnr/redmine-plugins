@@ -1,0 +1,29 @@
+<h2>Edit Review: <%= @tactical_meeting_response.user.name %> (<%= @tactical_meeting_review.role %>)</h2>
+
+<%= form_tag tactical_meeting_response_review_path(@tactical_meeting_response), method: :patch do %>
+  <table class="list">
+    <thead>
+      <tr><th>KRA</th><th>Weight</th><th>Score (0-100)</th></tr>
+    </thead>
+    <tbody>
+      <% @tactical_meeting_review.tactical_meeting_review_items.each do |item| %>
+        <tr>
+          <td><%= item.kra_name %></td>
+          <td><%= item.weight %>%</td>
+          <td>
+            <%= number_field_tag "scores[#{item.id}]", item.score, min: 0, max: 100, step: 0.01, required: true %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <p>
+    <%= label_tag "tactical_meeting_review[comment]", "Overall Comment" %><br>
+    <%= text_area_tag "tactical_meeting_review[comment]", @tactical_meeting_review.comment, rows: 4, style: "width: 100%;" %>
+  </p>
+
+  <%= submit_tag "Save Review" %>
+<% end %>
+
+<p><%= link_to "Back to Response", tactical_meeting_response_path(@tactical_meeting_response) %></p>
