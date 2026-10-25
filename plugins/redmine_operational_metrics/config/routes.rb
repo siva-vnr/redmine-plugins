@@ -10,7 +10,12 @@ namespace :api do
   resources :operational_metrics
 end
 
-resources :tactical_meetings, only: [:index, :new, :create]
+resources :tactical_meetings, only: [:index, :new, :create] do
+  member do
+    get 'summary'
+    post 'generate_summary'
+  end
+end
 resources :tactical_meeting_responses, only: [:index, :show, :new, :create, :edit, :update] do
   resource :review, only: [:new, :create, :edit, :update], controller: 'tactical_meeting_reviews'
 end

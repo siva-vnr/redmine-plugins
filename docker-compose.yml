@@ -12,6 +12,9 @@ services:
       REDMINE_DB_DATABASE: redmine
       REDMINE_SECRET_KEY_BASE: supersecretkey
       TZ: Asia/Kolkata
+      LANGFLOW_URL: https://langflow.itjl.xyz
+      LANGFLOW_FLOW_ID: ${LANGFLOW_FLOW_ID}
+      LANGFLOW_API_KEY: ${LANGFLOW_API_KEY}
     volumes:
       - redmine_data:/usr/src/redmine/files
       - ./plugins:/usr/src/redmine/plugins

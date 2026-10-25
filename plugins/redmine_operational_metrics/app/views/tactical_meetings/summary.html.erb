@@ -1,0 +1,28 @@
+<h2>Tactical Meeting Summary</h2>
+<p>
+  Meeting: <%= @tactical_meeting.start_date %> to <%= @tactical_meeting.end_date %>
+  <% if @tactical_meeting.facilitator.present? %>
+    | Facilitator: <%= @tactical_meeting.facilitator %>
+  <% end %>
+</p>
+
+<div class="box">
+  <% if @tactical_meeting.summary.present? %>
+    <% markdown_format = Redmine::WikiFormatting.format_names.include?('common_mark') ? 'common_mark' : 'markdown' %>
+    <div class="wiki">
+      <%= Redmine::WikiFormatting.to_html(markdown_format, @tactical_meeting.summary).html_safe %>
+    </div>
+  <% elsif @generating %>
+    <p>AI summary is being generated. Refresh this page in a few minutes.</p>
+  <% else %>
+    <% if @summary_error %>
+      <p class="flash error">Could not generate summary: <%= @summary_error %></p>
+    <% end %>
+    <p>Summary not generated yet.</p>
+    <% if User.current.admin? %>
+      <%= button_to "Generate AI Summary", generate_summary_tactical_meeting_path(@tactical_meeting), method: :post %>
+    <% end %>
+  <% end %>
+</div>
+
+<p><%= link_to "Back to Tactical Meetings", tactical_meetings_path %></p>

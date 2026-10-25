@@ -24,6 +24,13 @@
         <td>
           <%= link_to "Respond", new_tactical_meeting_response_path(tactical_meeting_id: meeting.id), class: 'icon icon-edit' %>
           <%= link_to "View Responses", tactical_meeting_responses_path(tactical_meeting_id: meeting.id), class: 'icon icon-view' %>
+          <% if meeting.summary.present? %>
+            <%= link_to "Summary", summary_tactical_meeting_path(meeting), class: 'icon icon-file' %>
+          <% elsif Rails.cache.exist?(GenerateTacticalMeetingSummaryJob.generating_key(meeting.id)) %>
+            <span>&#9203; Generating summary...</span>
+          <% elsif User.current.admin? %>
+            <%= link_to "✨ Generate Summary", generate_summary_tactical_meeting_path(meeting), method: :post %>
+          <% end %>
         </td>
       </tr>
     <% end %>
